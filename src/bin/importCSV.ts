@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+/* import * as fs from 'fs';
 import * as path from 'path';
 
 // Интерфейсы для типизации данных
@@ -58,3 +58,4 @@ const jsonResult = csvToNestedJson(csvFilePath);
 fs.writeFileSync('./heroes.json', JSON.stringify(jsonResult, null, 2), 'utf-8');
 
 console.log('JSON успешно создан:', jsonResult);
+*/
