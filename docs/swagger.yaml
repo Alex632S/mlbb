@@ -1,0 +1,132 @@
+openapi: 3.0.0
+info:
+  title: Hero Management API
+  version: 1.0.0
+  description: |
+    API для управления списком героев и их характеристиками.
+
+    ### Описание эндпоинтов:
+    - **GET /heroes** — Получить список всех героев.
+    - **POST /heroes** — Добавить нового героя.
+    - **GET /heroes/{heroId}** — Получить информацию о конкретном герое.
+    - **PUT /heroes/{heroId}** — Обновить информацию о герое.
+    - **DELETE /heroes/{heroId}** — Удалить героя.
+servers:
+  - url: 'https://api.example.com/v1'
+    description: Production server
+
+paths:
+  /heroes:
+    get:
+      summary: Получить список всех героев
+      description: Возвращает список всех героев с их характеристиками.
+      responses:
+        '200':
+          description: Успешный запрос. Возвращает список героев.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hero'
+    post:
+      summary: Добавить нового героя
+      description: Создает нового героя с заданными характеристиками.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Hero'
+      responses:
+        '201':
+          description: Герой успешно добавлен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hero'
+
+  /heroes/{heroId}:
+    get:
+      summary: Получить информацию о герое
+      description: Возвращает подробную информацию о конкретном герое.
+      parameters:
+        - name: heroId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешный запрос. Возвращает информацию о герое.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hero'
+    put:
+      summary: Обновить информацию о герое
+      description: Обновляет информацию о существующем герое.
+      parameters:
+        - name: heroId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Hero'
+      responses:
+        '200':
+          description: Информация о герое успешно обновлена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hero'
+    delete:
+      summary: Удалить героя
+      description: Удаляет героя из списка.
+      parameters:
+        - name: heroId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Герой успешно удален.
+
+components:
+  schemas:
+    Hero:
+      type: object
+      required:
+        - name
+        - class
+        - specialty
+        - lane
+      properties:
+        name:
+          type: string
+          description: Имя героя.
+        class:
+          type: string
+          description: Класс героя.
+        specialty:
+          type: string
+          description: Специальность героя.
+        lane:
+          type: string
+          description: Линия, на которой герой наиболее эффективен.
+        skills:
+          type: array
+          items:
+            type: string
+          description: Список навыков героя.
+        skillDescriptions:
+          type: array
+          items:
+            type: string
+          description: Описание каждого навыка героя.
