@@ -5,6 +5,7 @@ echo "🟢 Husky: Начало выполнения pre-commit хука"
 echo "🕐 Дата: $(date)"
 echo "📦 Версия node: $(node -v)"
 echo "📦 Версия npm: $(npm -v)"
+echo "📦 Версия yarn: $(yarn -v)"
 
 echo "🔍 Запуск lint-staged..."
 npx lint-staged
@@ -15,3 +16,5 @@ if [ $EXIT_CODE -ne 0 ]; then
 else
   echo "✅ Выполнение успешно завершено"
 fi
+
+LOG_FILE="husky.log"
