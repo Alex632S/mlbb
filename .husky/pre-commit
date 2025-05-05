@@ -1,9 +1,5 @@
 #!/bin/bash
-# setup/linting/setup-linting.sh
 
-
-
-# --- Конфигурация ---
 CONFIG_DIR="$(dirname "$(realpath "$0")")/configs"
 HUSKY_DIR="../../.husky"
 LOG_PREFIX="husky-"
