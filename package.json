@@ -2,6 +2,7 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
+  "license": "ISC",
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   },
@@ -10,11 +11,11 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "prepare": "husky install",
+    "postinstall": "husky install",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
+    "prepare": "husky install",
     "husky-logs": "cat .husky/husky.log"
   },
   "dependencies": {
@@ -40,7 +41,7 @@
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.3.1",
     "eslint-plugin-vue": "^10.1.0",
-    "husky": "^9.1.7",
+    "husky": "^8.0.0",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
     "pretty-quick": "^4.1.1",

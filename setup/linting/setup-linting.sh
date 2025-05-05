@@ -93,7 +93,7 @@ EOL
 
 # 5. Настройка Husky
 echo "🐶 Настраиваем Husky..."
-yarn dlx husky-init --yarn2 && yarn
+npx husky-init --yarn2 && yarn
 mkdir -p "../../.husky"
 
 cat > "../../.husky/pre-commit" << 'EOL'

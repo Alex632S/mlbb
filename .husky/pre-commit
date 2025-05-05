@@ -1,12 +1,17 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-LOG_FILE="husky.log"
+echo "🟢 Husky: Начало выполнения pre-commit хука"
+echo "🕐 Дата: $(date)"
+echo "📦 Версия node: $(node -v)"
+echo "📦 Версия npm: $(npm -v)"
 
-{
-  echo "=== Начало выполнения: $(date) ==="
-  echo "Запуск lint-staged..."
-  npx lint-staged
-  echo "Статус завершения: $?"
-  echo "=== Конец выполнения ==="
-} >> "$LOG_FILE" 2>&1
+echo "🔍 Запуск lint-staged..."
+npx lint-staged
+
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "❌ Ошибка выполнения (код: $EXIT_CODE)"
+else
+  echo "✅ Выполнение успешно завершено"
+fi
