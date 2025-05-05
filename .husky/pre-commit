@@ -6,7 +6,7 @@ HUSKY_DIR="./"
 LOG_PREFIX="husky-"
 
 LOG_FILE="$(git rev-parse --short HEAD 2>/dev/null || echo "pre-commit")"
-CURRENT_LOG="${HUSKY_DIR}/${LOG_PREFIX}${LOG_FILE}.log"
+CURRENT_LOG=".husky/${LOG_PREFIX}${LOG_FILE}.log"
 
 echo "🚀 Запуск проверок для коммита: ${LOG_FILE}" | tee "${CURRENT_LOG}"
 npx lint-staged --verbose | tee -a "${CURRENT_LOG}"
