@@ -1,5 +1,4 @@
 #!/bin/bash
-# setup/linting/setup-linting.sh
 
 # Проверка ОС
 OS="$(uname -s)"
@@ -112,10 +111,14 @@ mkdir -p "${HUSKY_DIR}"
 
 cat > "${HUSKY_DIR}/pre-commit" << 'EOL'
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
-LOG_FILE="$(git rev-parse --short HEAD 2>/dev/null || echo "precommit")"
-CURRENT_LOG="${HUSKY_DIR}/${LOG_PREFIX}${LOG_FILE}.log"
+# --- Конфигурация ---
+CONFIG_DIR="$(dirname "$(realpath "$0")")/configs"
+HUSKY_DIR="./"
+LOG_PREFIX="husky-"
+
+LOG_FILE="$(git rev-parse --short HEAD 2>/dev/null || echo "pre-commit")"
+CURRENT_LOG=".husky/${LOG_PREFIX}${LOG_FILE}.log"
 
 echo "🚀 Запуск проверок для коммита: ${LOG_FILE}" | tee "${CURRENT_LOG}"
 npx lint-staged --verbose | tee -a "${CURRENT_LOG}"
@@ -192,12 +195,3 @@ fi
 # 8. Устанавливаем Husky hooks
 echo "⚙️ Активируем git hooks..."
 yarn prepare
-
-# 9. Создаем документацию
-cat > "../../.husky/README.md" << 'EOL'
-# Husky на macOS
-
-## Проверка установки
-1. Убедитесь, что хуки исполняются:
-```bash
-ls -la .husky/
