@@ -9,7 +9,7 @@ LOG_PREFIX="husky-"
 # --- Функции ---
 generate_log_filename() {
   # Получаем хеш текущего коммита (если есть)
-  local commit_hash=$(git rev-parse --short HEAD 2>/dev/null || echo "precommit")
+  local commit_hash=$(git rev-parse --short HEAD 2>/dev/null || echo "pre-commit")
   echo "${HUSKY_DIR}/${LOG_PREFIX}${commit_hash}.log"
 }
 

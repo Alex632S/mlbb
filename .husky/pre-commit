@@ -1,4 +1,16 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-npm test
+# --- Конфигурация ---
+CONFIG_DIR="$(dirname "$(realpath "$0")")/configs"
+HUSKY_DIR="../../.husky"
+LOG_PREFIX="husky-"
+
+LOG_FILE="$(git rev-parse --short HEAD 2>/dev/null || echo "pre-commit")"
+CURRENT_LOG="${HUSKY_DIR}/${LOG_PREFIX}${LOG_FILE}.log"
+
+echo "🚀 Запуск проверок для коммита: ${LOG_FILE}" | tee "${CURRENT_LOG}"
+npx lint-staged --verbose | tee -a "${CURRENT_LOG}"
+
+# Ограничиваем количество файлов логов (сохраняем последние 10)
+ls -t ${HUSKY_DIR}/${LOG_PREFIX}*.log | tail -n +11 | xargs rm -f --
