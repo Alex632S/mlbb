@@ -2,12 +2,16 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "prepare": "husky"
   },
   "dependencies": {
     "@nuxt/content": "3.5.1",
@@ -17,10 +21,19 @@
     "@nuxt/image": "1.10.0",
     "@nuxt/ui": "3.1.1",
     "eslint": "^9.0.0",
+    "eslint-plugin-vue": "^10.1.0",
     "nuxt": "^3.17.1",
     "typescript": "^5.6.3",
     "vue": "^3.5.13",
     "vue-router": "^4.5.1"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "devDependencies": {
+    "eslint-config-prettier": "^10.1.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "prettier": "3.5.3",
+    "pretty-quick": "^4.1.1",
+    "simple-git-hooks": "^2.13.0"
+  }
 }
