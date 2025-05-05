@@ -2,7 +2,7 @@
 
 # --- Конфигурация ---
 CONFIG_DIR="$(dirname "$(realpath "$0")")/configs"
-HUSKY_DIR=""
+HUSKY_DIR="."
 LOG_PREFIX="husky-"
 
 LOG_FILE="$(git rev-parse --short HEAD 2>/dev/null || echo "pre-commit")"
