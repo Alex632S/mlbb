@@ -5698,6 +5698,13 @@ human-signals@^5.0.0:
   resolved "https://registry.npmjs.org/human-signals/-/human-signals-5.0.0.tgz#42665a284f9ae0dade3ba41ebc37eb4b852f3a28"
   integrity sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==
 
+husky-init@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.npmjs.org/husky-init/-/husky-init-8.0.0.tgz#af1773803a44a0625a2d9d415cc892f51847e7d0"
+  integrity sha512-P9qq7eOInj853p57QhK/QDKahx8Vd+hWWmzA+N+Q3/dsHH+DFUeRurRd6ZSFzF1Ol/6yUS+fa9yMw5Dao0pxxw==
+  dependencies:
+    husky "^8.0.0"
+
 husky@^8.0.0:
   version "8.0.3"
   resolved "https://registry.npmjs.org/husky/-/husky-8.0.3.tgz#4936d7212e46d1dea28fef29bb3a108872cd9184"
