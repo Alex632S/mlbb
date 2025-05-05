@@ -1,11 +1,28 @@
 #!/bin/bash
 # setup/linting/setup-linting.sh
 
+# Проверка ОС
+OS="$(uname -s)"
+echo "🔍 Обнаружена ОС: $OS"
+
 CONFIG_DIR="$(dirname "$(realpath "$0")")/configs"
 mkdir -p "$CONFIG_DIR"
 
-# 1. Установка зависимостей через yarn
-echo "📦 Устанавливаем зависимости через yarn..."
+# 1. Установка Homebrew (если нужно) и jq для macOS
+if [[ "$OS" == "Darwin" ]]; then
+  if ! command -v brew &> /dev/null; then
+    echo "🛠  Установка Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  if ! command -v jq &> /dev/null; then
+    echo "🛠  Установка jq..."
+    brew install jq
+  fi
+fi
+
+# 2. Установка зависимостей через yarn
+echo "📦 Устанавливаем зависимости..."
 yarn add --dev \
   @nuxt/eslint-config \
   @nuxt/eslint \
@@ -18,7 +35,7 @@ yarn add --dev \
   husky \
   lint-staged
 
-# 2. Создаем ESLint конфиг
+# 3. Создаем ESLint конфиг
 cat > "$CONFIG_DIR/eslint.config.mjs" << 'EOL'
 import { createConfigForNuxt } from '@nuxt/eslint-config/flat'
 import { join } from 'node:path'
@@ -59,7 +76,7 @@ export default createConfigForNuxt({
 })
 EOL
 
-# 3. Создаем Prettier конфиг
+# 4. Создаем Prettier конфиг
 cat > "$CONFIG_DIR/.prettierrc" << 'EOL'
 {
   "printWidth": 100,
@@ -74,12 +91,11 @@ cat > "$CONFIG_DIR/.prettierrc" << 'EOL'
 }
 EOL
 
-# 4. Настройка Husky для yarn
+# 5. Настройка Husky
 echo "🐶 Настраиваем Husky..."
 yarn dlx husky-init --yarn2 && yarn
 mkdir -p "../../.husky"
 
-# Создаем pre-commit хук с вашим содержимым
 cat > "../../.husky/pre-commit" << 'EOL'
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
@@ -88,10 +104,10 @@ echo "🔍 Running lint-staged..."
 npx lint-staged
 EOL
 
-# Даем права на выполнение
+# Установка прав для macOS/Linux
 chmod +x "../../.husky/pre-commit"
 
-# 5. Настройка lint-staged
+# 6. Настройка lint-staged
 cat > "../../.lintstagedrc" << 'EOL'
 {
   "*.{js,ts,vue}": ["eslint --fix", "prettier --write"],
@@ -99,24 +115,68 @@ cat > "../../.lintstagedrc" << 'EOL'
 }
 EOL
 
-# 6. Добавляем скрипты в package.json
+# 7. Добавляем скрипты в package.json
 echo "📦 Обновляем package.json..."
-yarn pkg set scripts.lint="eslint ."
-yarn pkg set scripts."lint:fix"="eslint . --fix"
-yarn pkg set scripts.format="prettier --write ."
-yarn pkg set scripts.prepare="husky install"
 
-# 7. Устанавливаем Husky hooks
+# Для macOS используем встроенный plutil или jq
+if [[ "$OS" == "Darwin" ]]; then
+  if command -v jq &> /dev/null; then
+    echo "🛠  Используем jq для обновления package.json..."
+    jq '.scripts += {
+      "lint": "eslint .",
+      "lint:fix": "eslint . --fix",
+      "format": "prettier --write .",
+      "prepare": "husky install",
+      "husky-logs": "cat .husky/husky.log"
+    }' package.json > temp.json && mv temp.json package.json
+  else
+    echo "⚠️  Используем встроенные инструменты macOS..."
+    # Альтернатива через node, если jq нет
+    node <<EOF
+    const fs = require('fs');
+    const pkg = JSON.parse(fs.readFileSync('package.json'));
+    pkg.scripts = {
+      ...pkg.scripts,
+      lint: "eslint .",
+      "lint:fix": "eslint . --fix",
+      format: "prettier --write .",
+      prepare: "husky install",
+      "husky-logs": "cat .husky/husky.log"
+    };
+    fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+EOF
+  fi
+else
+  # Для других ОС используем jq или ручное добавление
+  if command -v jq &> /dev/null; then
+    jq '.scripts += {
+      "lint": "eslint .",
+      "lint:fix": "eslint . --fix",
+      "format": "prettier --write .",
+      "prepare": "husky install",
+      "husky-logs": "cat .husky/husky.log"
+    }' package.json > temp.json && mv temp.json package.json
+  else
+    echo "⚠️  Добавьте вручную в секцию scripts package.json:"
+    echo '{'
+    echo '  "lint": "eslint .",'
+    echo '  "lint:fix": "eslint . --fix",'
+    echo '  "format": "prettier --write .",'
+    echo '  "prepare": "husky install",'
+    echo '  "husky-logs": "cat .husky/husky.log"'
+    echo '}'
+  fi
+fi
+
+# 8. Устанавливаем Husky hooks
 echo "⚙️ Активируем git hooks..."
 yarn prepare
 
-echo "✅ Настройка линтинга завершена!"
-echo "Структура проекта:"
-echo "  ├── setup/linting/configs/  - конфиги ESLint и Prettier"
-echo "  ├── .husky/                - git hooks"
-echo "  └── tsconfig.json          - основной TS конфиг"
-echo ""
-echo "Команды:"
-echo "  yarn lint     - проверка кода"
-echo "  yarn lint:fix - автоматическое исправление ошибок"
-echo "  yarn format   - форматирование кода"
+# 9. Создаем документацию
+cat > "../../.husky/README.md" << 'EOL'
+# Husky на macOS
+
+## Проверка установки
+1. Убедитесь, что хуки исполняются:
+```bash
+ls -la .husky/

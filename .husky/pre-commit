@@ -1,5 +1,12 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-echo "🔍 Running lint-staged..."
-npx lint-staged
+LOG_FILE="husky.log"
+
+{
+  echo "=== Начало выполнения: $(date) ==="
+  echo "Запуск lint-staged..."
+  npx lint-staged
+  echo "Статус завершения: $?"
+  echo "=== Конец выполнения ==="
+} >> "$LOG_FILE" 2>&1

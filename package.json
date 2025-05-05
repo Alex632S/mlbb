@@ -14,7 +14,8 @@
     "prepare": "husky install",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "husky-logs": "cat .husky/husky.log"
   },
   "dependencies": {
     "@eslint/js": "^9.26.0",
