@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-CONFIG_DIR="$(dirname "$(realpath "$0")")/configs"
+# --- Конфигурация ---
 HUSKY_DIR="../../.husky"
 LOG_PREFIX="husky-"
 
